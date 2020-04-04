@@ -1,0 +1,29 @@
+a := 10 b := &a   // *int 类型指针
+printf(%p &传递地址)   %#v格式化输出
+
+&对变量进行取地址,可以获得该变量的指针变量
+指针变量的值是指针地址
+*对指针变量进行取值,获得指针变量指向的值
+
+指针类型: *int * stirng
+
+func modify(x int) {
+    x = 100
+}
+
+func modify1(y *int){
+    *y = 100
+}
+
+a := 1 modify(a) // 输出1   modify1(&a) // 输出100
+
+new():  var a *int   a = new(int)
+
+
+自定义类型:  type myint int 
+
+结构体: type a struct{}    匿名结构体: var b struct{}  结构体指针: type c struct{}  a := new(c)
+
+初始化时字段可以省略
+
+构造函数:  func newC(id, name int) *C{ return &c{}}    返回指针类型的结构体可以节省内存的开销,原始的类似ctrl+c ctrl+v 

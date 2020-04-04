@@ -1,0 +1,44 @@
+方法: 作用特定类型变量的函数   接收者:特定类型的变量 类似self, this
+
+定义: func (接收者变量  接收者类型) 方法名(参数列表) (返回参数){}
+
+接收者变量:用接收者类型第一个字母命名
+
+该方法只能由接收者调用
+
+指针类型的使用:
+    1、需要修改接收者的值
+    2、接收者拷贝代价比较大的对象
+    3、保证一致性,如果某个方法使用了指针接收者,其他方法也使用指针接收者
+
+可一给任意类型添加方法: 如个int 添加方法  type myint int  func (m myint) s(){}
+
+结构体:{
+    结构体匿名字段: type a struct {strint int} 字段唯一
+    嵌套结构体: type a struct{age int name string} type b struct{s int  a *a}  p := b{age:1, name:"s", a:{},}  嵌套可以为结构体切片 []a
+    匿名嵌套: type a struct{} type b struct{ a }
+
+    可见性: 首字母为大写为公有外部包可以访问, 小写则为私有
+
+    json序列化: data, err := json.Marshal(字段)
+    json反序列: Unmarshsal([]byte(), 变量(结构体))
+
+    结构体标签(Tag):type a struct{a int `key:"value"`}  
+    例如在解析json时, 前端传来为小写,后端结构体大写才能访问, 可以`json:"title"`
+    数据库操作时也可以使用
+}
+
+文件操作{
+    file, erro := os.open(path)  // 循环读取file.Read(byte)
+    reader := bufio.NewReader(file)  reader.Readstring("\n")  // 
+    content, erro := ioutil.ReadFile(path)  // content为byte类型 string(content)
+
+    读写:
+        os.Openfile(path, flag)  flag 文件打开模式 // os.O_Wronly 只写  os.o_create 创建文件   os.o_rdonly 只读
+        os.o_rdwr  读写   os.o_trunc  清空  os.o_append  追加
+        file.write([]byte(string))
+        file.writestring(string)
+
+        bu := bufio.newwriter()  bu.writestring()  write.flush()
+        ioutil.writefile(path, []byte[str], )
+}

@@ -1,0 +1,54 @@
+接口:interferce(一种抽象类型) 方法的集合:{
+    type sayer interferce{ 方法1() 返回值}
+    type cat struct{}   方法：func(a cat(结构体名)) say函数名(){}   type sayer interferce {say()接收的方法}
+    实现接口:  func d(s参数 sayer接口名)
+    接口名一般后带er  var s sayer
+
+    使用值接收者实现接口:类型的值和类型的指针都能保存到变量中   func (p person) move() move为接口名  变为指针时: p := &person{}
+    使用指针接收者实现接口:只有指针类型能保存到接口变量    func (p *person) mover()   
+
+    只有结构实现了接口中的方法才能实现接口
+
+    空接口:不是实现任何方法 ,可以存储任意值, 定义一个空接口 var x interferce
+    实现map的扩展: map[string]interferce{}
+
+    类型断言: res, ok := x.(type(数据类型))  // 返回ok为false判断类型不对, res正确时返回数据零值, 可用switch简化
+
+}
+
+time 包:{
+    time.Now  // 获取当前时间
+    time.Now.Years()  // 年
+    time.Now.Unix()  // 时间戳从1970年开始到现在的秒数
+    time.Unix()  // 时间戳改为格式
+    time.Sleep(5*time.Second)  // 原先为毫秒  变为n*time.Second是  time.Duraction(n)*time.Second
+
+    time.Now.Format('2006.01.02 15:04:05')  // 输出格式为y.m.d.h.m.s go诞生时间
+
+    字符串时间解析:
+    loc , err := time.LoadLocation("Asia/Shanghai")
+    time.ParseInLocation("2016....", timstr, loc)
+}
+
+
+反射:{
+    obj := reflect.Typeof(x)  //拿到值类型对象
+    obj.Kind() // 获取种类int,alice,map,interferce    obj.Name() // 种类名
+
+    obj1 := reflect.Value0f(x)  //可以获取类型值
+    obj1.Kind() // 拿到元素值类型
+    obj1.Elem().Kind() obj1.SetInt()  // 设置值传入为指针类型
+
+
+    结构体反射:{
+        反射性能低
+        t :+ reflect.Typeof(struct)
+        t.Numfild()  // 获取结构体的所有字段
+        for i := 0; i<t.Numfild; i++{ obj := t.fild(i)// 获取字段}  obj.Tag() // 获取标签  obj.Tag.Get(key)  // 获取某一标签的值
+        t.FildByName("")  // 根据字段
+
+        t.NumMethod()  // 获取变量方法数量    t.MethodByName()  方法名开头不为小写
+        v:=reflect.Value0f()  v.method(i).type()  获取方法类型  t.method(i).Name 获取方法名
+    }
+
+}

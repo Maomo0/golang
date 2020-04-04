@@ -1,0 +1,19 @@
+package go源码集合
+package 包名 1、一个文件夹只有一个包 2、包为main的包为程序的入口包,编译时不含main包的源代码不会得到可执行文件
+包中首字母大小写表示公有或私有
+包前有 _会执行下的init方法
+
+包的导入路径从gopath src后开始导入
+导入包的前面声明可以给包起别名
+匿名导入包:import _ "包"
+
+init()初始化函数: 每个包中都有, 无参无返回,包调用时执行
+若多个包中调用了其他包从后往前调用init(),最后是Main()
+一个文件夹中的包要一样,可以运行但是包会报错
+
+日志{
+    日志级别: Debug  Trace Info  Warring Error Fatal
+    os.stdout() // 像终端些日志
+    log.SetOutput()  // 想文件写入日志
+    os.Writer
+}

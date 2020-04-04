@@ -1,0 +1,41 @@
+go build -o name.exe 
+go install 将exe文件放入bin ，可以在任何位置执行
+go run name.go 执行程序
+
+跨平台:{
+   set CGO_ENABLED = 0 
+   set COOS = linux
+   set GOARCH = amd64
+}
+
+package main可以独立执行的文件,每个go中必有
+
+{不能单独成一行
+
+定义变量可以在函数外，变量为使用会报错
+
+go fmt name.go 代码格式化
+
+变量声明: var a string     var{a string   b int   c bool}
+var a, b = "", 10    m := 10   _匿名变量,不占用空间   
+
+常量 const{n1 = 10 n2 n3}  n2,n3与n1一致    iota常量计数器
+1 << (10*iota) 1向左移 1024
+1 << 2    左移两位 100变4
+4 >> 2    右移两位 100 变1
+&& 与   ||或   !非
+
+
+if {} else if {}    for ; ; {}    for i>0{}    switch varliable{case :} 
+
+
+uint  无符号整型   uintptr 无符号整型用于存放指针
+
+%b 二进制  %d十进制   %o八进制  %x 十六进制
+
+字符串合并 s1+s2   fmt.Sprintf("%s", s1)  字符串分割  strings.Split(s1, "")  是否包含  strings.Contains()
+
+strings.Index  strings.JOin()    
+
+字符切片 s := []string{"how", "do"} s=[how do]   遍历中英文字符:for _, i := range s {fmt.Println(stirng(i))}
+

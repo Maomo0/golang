@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    }
+#login{
+    margin: 240px auto;
+    text-align: center;
+    border: chocolate solid;
+    }
+#username,#password{
+    margin-bottom: 10px;
+    width: 150px;
+    height: 20px;
+}
+#btn{
+    background-color: rgb(16, 84, 209);
+    border: none;
+    border-radius: 15px 15px 15px 15px;
+    width: 70px;
+    height: 40px;
+}
+    #btn:hover{
+        background-color: chartreuse;
+    }
+    </style>
+</head>
+<body>
+    <div id="login">
+        <span>用&nbsp户&nbsp名:</span>
+        <p><input id='username'type="text" name="username" placeholder="请输入用户名">
+            <span id="name"></span>
+        </p>
+        <br>
+        <span>密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:</span>
+        <p><input id='password'type="password" name="password" placeholder="密码" ><br></p>
+        <input id='btn' type="submit">
+    </div>
+</body>
+</html>
