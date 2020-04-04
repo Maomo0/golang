@@ -17,7 +17,7 @@ func TestStore(t *testing.T)  {
 }
 
 func TestRestroe(t *testing.T)  {
-	var stuin student  // 接口
+	var stuin student // 接口
 	stuin = &stu{}
 	err, data := stuin.Restore()
 	if err != true{
