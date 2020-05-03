@@ -47,24 +47,27 @@ func main(){
 	fmt.Println("server start successes wait for a client connect")
 	for  {
 		conn, err = list.Accept()
-		var b = true
+		//var b = true
 		if err != nil{
 			log.Fatal("connect fail\n", err)
 		}
 		log.Println("connect addr for", conn.RemoteAddr())
 		go func() {
 			for{
-				msg, err = serutil.ReadBuff(conn)
+				msg, err, conn = serutil.ReadBuff(conn)  // 读取客户端终端输入
+				serpro.Main(string(msg), conn, err)
+				//for _ , v := range serpro.Usg.GetOnlineUser(){
+				//	fmt.Println(v.Conn.RemoteAddr())
+				//}
 				if err != nil{
+					serpro.UserExit(conn)
+					//for _ , v := range serpro.Usg.GetOnlineUser(){
+					//	fmt.Println("server 65", v.Conn.RemoteAddr())
+					//}
 					break
 				}
-				if b == true{
-					serpro.Main(string(msg), conn)
-					ut := serpro.Usg.GetOnlineUser()
-					for i, v := range ut{
-						fmt.Println("在线:", i, v)
-					}
-				}
+					//serpro.Main(string(msg), conn)
+					//serpro.SentOnline(conn)
 			}
 		}()
 	}

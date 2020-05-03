@@ -27,7 +27,7 @@ func InitRedis(port string) (p RedisConnect){
 	}
 	return p
 }
-func ReadBuff(conn net.Conn)(msg []byte, err error) {
+func ReadBuff(conn net.Conn)(msg []byte, err error, c net.Conn) {
 	b := bufio.NewReader(conn)
 	lengthByte, _ := b.Peek(4) // 读取前4个字节,根据长度的数据类型而定如int32为4
 	lenBuff := bytes.NewBuffer(lengthByte)
@@ -35,15 +35,15 @@ func ReadBuff(conn net.Conn)(msg []byte, err error) {
 	err = binary.Read(lenBuff, binary.LittleEndian, &length)
 	if err != nil {
 		fmt.Println("server binary read err serutil/serutil 44", err, conn.RemoteAddr())
-		return nil, err
+		return nil, err, conn
 	}
 	msg = make([]byte, int(4+length))
 	_, err = b.Read(msg)
 	if err != nil {
 		fmt.Println("server read err serutil/serutil 50", err, conn.RemoteAddr())
-		return nil, err
+		return nil, err, conn
 	}
-	return msg[4:], err
+	return msg[4:], err, conn
 }
 
 func BufWrite(msg []byte, conn net.Conn) (err error){

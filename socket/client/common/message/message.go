@@ -1,6 +1,9 @@
 package message
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 const(
 	UserLogin = "用户登录成功"
@@ -8,6 +11,7 @@ const(
 	UserUp = "用户上线"
 	UserExit = "用户退出"
 	NotUser = "用户不存在"
+	UserOnline = "用户在线"
 )
 
 const (
@@ -26,4 +30,19 @@ func LoginMsg() (id int, pwd string){
 	fmt.Printf("Pwd:")
 	fmt.Scanf("%s\n", &pwd)
 	return id, pwd
+}
+
+func (m *Message) Encode()(data []byte, err error){
+	data, err = json.Marshal(m)
+	if err != nil{
+		return
+	}
+	return data, nil
+}
+func (m *Message) Decode(data []byte) (me *Message, err error) {
+	err = json.Unmarshal(data, &m)
+	if err != nil{
+		return
+	}
+	return m, nil
 }

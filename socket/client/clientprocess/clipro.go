@@ -25,11 +25,18 @@ func LoginMenu()  {
 	fmt.Println("\t5:用户退出\t")
 	fmt.Println("\t-------------------\t")
 }
-func ShowLoginMenu(r redis.Conn, conn net.Conn){
+func ShowLoginMenu(r redis.Conn, conn net.Conn, id int){
 	str,_ := cliutil.ReadMsg()  // 读取终端输入
 	switch str {
 	case "1":
-		fmt.Println("sum person")
+		for _, v := range message.UsIn{
+			if v.Id == id{
+				continue
+			}
+			if v.UserStatus == message.UserIn{
+				fmt.Printf("Id:%d  %s\n", v.Id, message.UserOnline)
+			}
+		}
 	case "2":
 		fmt.Println("sent msg to some people")
 	case "3":
@@ -45,26 +52,30 @@ func ShowLoginMenu(r redis.Conn, conn net.Conn){
 func ChoiceMenu(r redis.Conn, conn net.Conn){
 	str,_ := cliutil.ReadMsg()  // 读取终端输入
 	err := cliutil.BufWrite([]byte(str), conn)
-	var msg []byte
+	us := &message.UserLoginMsg{}
 	if err != nil{
 		return
 	}
 	switch str {
 	case "1":
 		id, pwd := message.LoginMsg()
-		mes, _ := Login(conn, r, id, pwd)
+		mes, ul := Login(conn, r, id, pwd)
 		if mes.Type != message.UserIn {
 			break
 		}
-		msg, err = cliutil.ReadBuff(conn)
-		if err != nil{
-			return
-		}else {
-			fmt.Println(string(msg))
-		}
+		us.Id = ul.Id
+		us.UserStatus = ul.UserStatus
+		us.Conn = conn
+		fmt.Println("Id:", ul.Id, message.UserLogin)
+		go func() {  // 协成开启不断接受服务端发送数据
+			for{
+				message.LoginOnlinePro(conn)
+				message.UpdateOnline(us, id, conn)
+			}
+		}()
 		for {
 			LoginMenu()
-			ShowLoginMenu(r, conn)
+			ShowLoginMenu(r, conn, us.Id)
 		}
 	case "2":
 		fmt.Println("register")
