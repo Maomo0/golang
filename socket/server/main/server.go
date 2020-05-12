@@ -55,7 +55,8 @@ func main(){
 		go func() {
 			for{
 				msg, err, conn = serutil.ReadBuff(conn)  // 读取客户端终端输入
-				serpro.Main(string(msg), conn, err)
+				serpro.Main(string(msg), conn, err, rc)
+				fmt.Println(string(msg))
 				//for _ , v := range serpro.Usg.GetOnlineUser(){
 				//	fmt.Println(v.Conn.RemoteAddr())
 				//}

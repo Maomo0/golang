@@ -7,11 +7,14 @@ import (
 
 const(
 	UserLogin = "用户登录成功"
-	UserFail = "用户登录失败"
+	UserFail = "密码错误"
 	UserUp = "用户上线"
 	UserExit = "用户退出"
-	NotUser = "用户不存在"
+	NotUser = "该用户不存在"
 	UserOnline = "用户在线"
+	UserIns = "用户已存在"
+	UserRegister = "用户注册成功"
+	NotUserIn = "无用户在线"
 )
 
 const (

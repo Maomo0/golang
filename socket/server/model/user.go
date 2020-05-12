@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
-	"socket/client/common/message"
 )
 
 type User struct {
@@ -41,7 +40,8 @@ func UserIn(r redis.Conn, id int) (bool, []byte){
 	res, err := redis.String(r.Do("hget", "users", id))
 	if err != nil{
 		if err == redis.ErrNil{
-			fmt.Println(message.NotUser)
+			//fmt.Println(message.NotUser)
+			return false, nil
 		}
 		return false, nil
 	}

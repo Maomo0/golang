@@ -17,6 +17,9 @@ func main(){
 	defer cliutil.CliClose(c.Conn)
 	for  {
 		pro.MainMenu()
-		pro.ChoiceMenu(p.Pool.Get(), c.Conn)
+		err := pro.ChoiceMenu(p.Pool.Get(), c.Conn)
+		if err != nil{
+			return
+		}
 	}
 }
