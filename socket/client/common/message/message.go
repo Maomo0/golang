@@ -16,13 +16,19 @@ const(
 	UserRegister = "用户注册成功"
 	NotUserIn = "无用户在线"
 )
-
+const (
+	AfterLogin = "AfterLogin"
+	Login = "Login"
+	Register = "Register"
+)
 const (
 	UserDown = iota  // 用户不在线
 	UserIn  // 用户在线
+	SentData
 )
 
 type Message struct {
+	Id int `json:"id"`
 	Data string `json:"data"`
 	Type int `json:"type"`
 }

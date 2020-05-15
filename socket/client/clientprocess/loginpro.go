@@ -60,9 +60,8 @@ func ShowOnlineUser(id int){
 	}
 }
 
-func SentMsgToOnlineUser(conn net.Conn, id int){
-	//用户登录后选择2,群发消息
-	//维护信息可以包括登录后的所有功能
+func SentMsgToOnlineUser(me * message.Message) *message.Message{
+	return me
 }
 
 func AddFriend(){

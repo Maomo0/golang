@@ -1,12 +1,15 @@
 package clientprocess
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"net"
 	"os"
 	"socket/client/cliutil"
 	"socket/client/common/message"
+	"socket/server/model"
+	"strings"
 )
 
 func MainMenu() {
@@ -27,27 +30,35 @@ func LoginMenu()  {
 }
 func ShowLoginMenu(r redis.Conn, conn net.Conn, id int){
 	str,_ := cliutil.ReadMsg()  // 读取终端输入
+	lo := model.LoginMsg{Id: id, LoginStatus: message.AfterLogin}
 	switch str {
 	case "1":
-		ShowOnlineUser(id)
-		//if len(message.UsIn) == 1{
-		//	fmt.Println(message.NotUserIn)
-		//}
-		//for _, v := range message.UsIn{
-		//	if v.Id == id{
-		//		continue
-		//	}
-		//	if v.UserStatus == message.UserIn{
-		//		fmt.Printf("Id:%d  %s\n", v.Id, message.UserOnline)
-		//	}
-		//}
-	case "2":
-		str = fmt.Sprintf("sent msg to some people")
-		err  := cliutil.BufWrite([]byte(str), conn)
+		lo.LoginChoice = str
+		data := lo.Encode()
+		err := cliutil.BufWrite(data, conn)
 		if err != nil{
 			return
 		}
-		fmt.Println("sent msg to some people")
+		ShowOnlineUser(id)
+	case "2":
+		// 信息的同步在message.LoginOnlinePro,协程开启能不断的接受服务其发送的信息
+		lo.LoginChoice = str
+		fmt.Printf("Sent data(输入exit退出发送):")
+		for {
+			data := bufio.NewReader(os.Stdin)   // 使用终端读取, scanf遇到空格读取不到
+			str, _ = data.ReadString('\n')
+			str = strings.Trim(str,"\t\n")
+			if str == "exit"{
+				break
+			}
+			lo.SentData = str
+			da := lo.Encode()
+			//str = fmt.Sprintf("sent msg to some people")
+			err  := cliutil.BufWrite(da, conn)
+			if err != nil{
+				return
+			}
+		}
 	case "3":
 		fmt.Println("add one friend")
 	case "4":
@@ -60,13 +71,17 @@ func ShowLoginMenu(r redis.Conn, conn net.Conn, id int){
 }
 func ChoiceMenu(r redis.Conn, conn net.Conn) error{
 	str,_ := cliutil.ReadMsg()  // 读取终端输入
-	err := cliutil.BufWrite([]byte(str), conn)
 	us := &message.UserLoginMsg{}
-	if err != nil{
-		return err
-	}
+	lo := &model.LoginMsg{}
 	switch str {
 	case "1":
+		lo.LoginStatus = message.Login  // 发送给服务器选择的相关信息
+		lo.LoginChoice = str
+		data := lo.Encode()
+		err := cliutil.BufWrite(data, conn)
+		if err != nil{
+			return err
+		}
 		id, pwd := message.LoginMsg()
 		mes, ul, err := Login(conn, r, id, pwd)
 		if err != nil{
@@ -91,8 +106,15 @@ func ChoiceMenu(r redis.Conn, conn net.Conn) error{
 			ShowLoginMenu(r, conn, us.Id)
 		}
 	case "2":
+		lo.LoginStatus = message.Register
+		lo.LoginChoice = str
+		data := lo.Encode()
+		err := cliutil.BufWrite(data, conn)
+		if err != nil{
+			return err
+		}
 		RegisterPro(conn)
-		data, err := cliutil.ReadBuff(conn)
+		data, err = cliutil.ReadBuff(conn)
 		if err != nil{
 			break
 		}
