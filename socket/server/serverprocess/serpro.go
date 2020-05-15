@@ -38,10 +38,6 @@ func ManOne(conn net.Conn, err error)  {
 			SentOnline(v.Conn)
 		}
 	}
-	//err := serutil.BufWrite([]byte(message.UserUp), conn)
-	//if err != nil{
-	//	return
-	//}
 }
 func ChoiceTwo(r redis.Conn, conn net.Conn){
 	b := RegisterPro(conn, r)

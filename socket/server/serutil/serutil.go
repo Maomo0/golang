@@ -34,7 +34,7 @@ func ReadBuff(conn net.Conn)(msg []byte, err error, c net.Conn) {
 	var length int32
 	err = binary.Read(lenBuff, binary.LittleEndian, &length)
 	if err != nil {
-		fmt.Println("server binary read err serutil/serutil 44", err, conn.RemoteAddr())
+		//fmt.Println("server binary read err serutil/serutil 44", err, conn.RemoteAddr())
 		return nil, err, conn
 	}
 	msg = make([]byte, int(4+length))

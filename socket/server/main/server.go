@@ -5,6 +5,8 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"log"
 	"net"
+	"socket/client/common/message"
+	"socket/server/model"
 	"socket/server/serutil"
 	serpro "socket/server/serverprocess"
 )
@@ -42,6 +44,7 @@ func closes(conn net.Conn, list net.Listener, rc redis.Conn){
 }
 func main(){
 	rc := P.Pool.Get()
+	lo := &model.LoginMsg{}
 	var msg []byte
 	defer closes(conn, list, rc)
 	fmt.Println("server start successes wait for a client connect")
@@ -55,20 +58,20 @@ func main(){
 		go func() {
 			for{
 				msg, err, conn = serutil.ReadBuff(conn)  // 读取客户端终端输入
-				serpro.Main(string(msg), conn, err, rc)
-				fmt.Println(string(msg))
-				//for _ , v := range serpro.Usg.GetOnlineUser(){
-				//	fmt.Println(v.Conn.RemoteAddr())
-				//}
+				if string(msg) != ""{
+					lo.Decode(msg)
+				}
+				if lo.LoginStatus == message.Login || lo.LoginStatus == message.Register{  // 用户登录注册的操作
+					serpro.Main(lo.LoginChoice, conn, err, rc)
+				}
+				if lo.LoginStatus == message.AfterLogin{ // 用户登录后的操作
+					serpro.AfterLoginMain(lo, conn)
+				}
 				if err != nil{
 					serpro.UserExit(conn)
-					//for _ , v := range serpro.Usg.GetOnlineUser(){
-					//	fmt.Println("server 65", v.Conn.RemoteAddr())
-					//}
 					break
 				}
-					//serpro.Main(string(msg), conn)
-					//serpro.SentOnline(conn)
+				//fmt.Println(string(msg))
 			}
 		}()
 	}
